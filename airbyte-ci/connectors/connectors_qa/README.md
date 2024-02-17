@@ -98,8 +98,10 @@ poe type_check
 ```bash
 poe lint
 ```
-
 ## Changelog
+
+### 1.0.4
+Added `ValidateBreakingChangesDeadlines` check that verifies the minimal compliance of breaking change rollout deadline.
 
 ### 1.0.3
 Disable `CheckDocumentationStructure` for now. 
