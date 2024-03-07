@@ -10,6 +10,7 @@ from connectors_qa import consts
 from connectors_qa.models import Check, CheckCategory, CheckResult
 from metadata_service.validators.metadata_validator import PRE_UPLOAD_VALIDATORS, ValidatorOptions, validate_and_load  # type: ignore
 
+import pydash
 
 class MetadataCheck(Check):
     category = CheckCategory.METADATA
@@ -99,7 +100,7 @@ class ValidateBreakingChangesDeadlines(MetadataCheck):
     it's deadline is at least a week in the future.
     """
     name = "Breaking change opt-in should be a week in the future"
-    description = f"If the connector version has a breaking change, the deadline field must be set to at least a week in the future."
+    description = "If the connector version has a breaking change, the deadline field must be set to at least a week in the future."
 
     def _run(self, connector: Connector) -> CheckResult:
 
@@ -113,7 +114,7 @@ class ValidateBreakingChangesDeadlines(MetadataCheck):
                 message="Can't verify breaking changes deadline: connector version is not defined.",
             )
 
-        breaking_changes = connector.metadata['releases']['breakingChanges']
+        breaking_changes = pydash.get(connector.metadata, "releases.breakingChanges", [])
 
         if breaking_changes is None or len(breaking_changes) == 0:
             return self.pass_(
@@ -121,16 +122,14 @@ class ValidateBreakingChangesDeadlines(MetadataCheck):
                 message="No breaking changes found.",
             )
 
-        current_version_brekaking_changes = breaking_changes.get(current_version)
-
-        if current_version_brekaking_changes is None:
+        current_version_breaking_changes = breaking_changes.get(current_version)
+        if current_version_breaking_changes is None:
             return self.pass_(
                 connector=connector,
                 message="No breaking changes found for the current version.",
             )
 
-        upgrade_deadline = current_version_brekaking_changes.get('upgradeDeadline')
-
+        upgrade_deadline = current_version_breaking_changes.get("upgradeDeadline")
         if upgrade_deadline is None:
             return self.fail(
                 connector=connector,
@@ -138,7 +137,7 @@ class ValidateBreakingChangesDeadlines(MetadataCheck):
             )
 
         upgrade_deadline_datetime = datetime.strptime(upgrade_deadline, "%Y-%m-%d")
-        one_week_from_now = datetime.now() + timedelta(weeks=1)
+        one_week_from_now = datetime.utcnow() + timedelta(weeks=1)
 
         if upgrade_deadline_datetime < one_week_from_now:
             return self.fail(
@@ -146,10 +145,7 @@ class ValidateBreakingChangesDeadlines(MetadataCheck):
                 message=f"The upgrade deadline for the breaking changes in {current_version} is less than 7 days from today. Please extend the deadline.",
             )
 
-        return self.pass_(
-            connector=connector,
-            message="okay",
-        )
+        return self.pass_(connector=connector, message="The upgrade deadline is set to at least a week in the future")
 
 
 ENABLED_CHECKS = [
