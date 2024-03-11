@@ -271,7 +271,7 @@ flowchart TD
         build[Build connector docker image]
         unit[Run unit tests]
         integration[Run integration tests]
-        airbyte_lib_validation[Run airbyte-lib validation tests]
+        pyairbyte_validation[Run PyAirbyte validation tests]
         cat[Run connector acceptance tests]
         secret[Load connector configuration]
 
@@ -279,7 +279,7 @@ flowchart TD
         unit-->build
         secret-->integration
         secret-->cat
-        secret-->airbyte_lib_validation
+        secret-->pyairbyte_validation
         build-->integration
         build-->cat
     end
@@ -632,9 +632,6 @@ You can find the list of internal packages [here](https://github.com/airbytehq/a
 
 #### Examples
 You can pass multiple `--poetry-package-path` options to run poe tasks.
-
-E.G.: running Poe tasks on `airbyte-lib` and `airbyte-ci/connectors/pipelines`:
-`airbyte-ci test --poetry-package-path=airbyte-ci/connectors/pipelines --poetry-package-path=airbyte-lib`
 
 E.G.: running Poe tasks on the modified internal packages of the current branch:
 `airbyte-ci test --modified`
