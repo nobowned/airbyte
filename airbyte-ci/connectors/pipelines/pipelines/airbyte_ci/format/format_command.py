@@ -16,7 +16,8 @@ from pipelines.airbyte_ci.format.consts import DEFAULT_FORMAT_IGNORE_LIST, REPO_
 from pipelines.consts import GIT_IMAGE
 from pipelines.helpers import sentry_utils
 from pipelines.helpers.cli import LogOptions, log_command_results
-from pipelines.helpers.utils import sh_dash_c
+from pipelines.helpers.git import get_current_git_revision, get_modified_files, get_modified_files_local
+from pipelines.helpers.utils import sh_dash_c, transform_strs_to_paths
 from pipelines.models.contexts.click_pipeline_context import ClickPipelineContext, pass_pipeline_context
 from pipelines.models.steps import CommandResult, StepStatus
 
@@ -84,8 +85,10 @@ class FormatCommand(click.Command):
             Directory: The directory with the files to format that are not gitignored.
         """
         # Load a directory from the host with all the files to format according to the file_filter and the .gitignore files
+        modified_files = get_modified_files_local(get_current_git_revision())
+        self.logger.info(f"files to format: - {str(modified_files)}")
         dir_to_format = dagger_client.host().directory(
-            self.LOCAL_REPO_PATH, include=self.file_filter + ["**/.gitignore"], exclude=DEFAULT_FORMAT_IGNORE_LIST
+            self.LOCAL_REPO_PATH, include=list(modified_files), exclude=DEFAULT_FORMAT_IGNORE_LIST
         )
 
         return (
