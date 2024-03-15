@@ -156,10 +156,10 @@ public class ParquetSerializedBufferTest {
       writer.flush();
       // some data are randomized (uuid, timestamp, compression?) so the expected byte count is not always
       // deterministic
-      assertTrue(minExpectedByte <= writer.getByteCount() && writer.getByteCount() <= maxExpectedByte,
+      assertTrue(minExpectedByte <= writer.byteCount && writer.byteCount <= maxExpectedByte,
           String.format("Expected size between %d and %d, but actual size was %d",
-              minExpectedByte, maxExpectedByte, writer.getByteCount()));
-      final InputStream in = writer.getInputStream();
+              minExpectedByte, maxExpectedByte, writer.byteCount));
+      final InputStream in = writer.inputStream;
       try (final FileOutputStream outFile = new FileOutputStream(tempFile)) {
         IOUtils.copy(in, outFile);
       }

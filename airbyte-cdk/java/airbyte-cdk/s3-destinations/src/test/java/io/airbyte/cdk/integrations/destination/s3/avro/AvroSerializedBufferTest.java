@@ -96,7 +96,7 @@ public class AvroSerializedBufferTest {
                               final S3AvroFormatConfig config,
                               final String expectedData)
       throws Exception {
-    final File outputFile = buffer.getFile();
+    final File outputFile = buffer.file;
     try (final AvroSerializedBuffer writer = (AvroSerializedBuffer) AvroSerializedBuffer
         .createFunction(config, () -> buffer)
         .apply(streamPair, catalog)) {

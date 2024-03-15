@@ -68,7 +68,7 @@ public class JsonLSerializedBufferTest {
                               final Long maxExpectedByte,
                               final String expectedData)
       throws Exception {
-    final File outputFile = buffer.getFile();
+    final File outputFile = buffer.file;
     try (final JsonLSerializedBuffer writer = (JsonLSerializedBuffer) JsonLSerializedBuffer
         .createBufferFunction(null, () -> buffer)
         .apply(streamPair, catalog)) {

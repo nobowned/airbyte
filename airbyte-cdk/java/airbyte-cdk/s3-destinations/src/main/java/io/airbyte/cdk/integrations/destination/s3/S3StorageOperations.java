@@ -160,7 +160,7 @@ public class S3StorageOperations extends BlobStorageOperations {
     final long partSize = DEFAULT_PART_SIZE;
     final String bucket = s3Config.getBucketName();
     final String partId = getPartId(objectPath);
-    final String fileExtension = getExtension(recordsData.getFilename());
+    final String fileExtension = getExtension(recordsData.filename);
     final String fullObjectKey;
     if (StringUtils.isNotBlank(s3Config.getFileNamePattern())) {
       fullObjectKey = s3FilenameTemplateManager
@@ -196,7 +196,7 @@ public class S3StorageOperations extends BlobStorageOperations {
     }
 
     try (final OutputStream outputStream = rawOutputStream;
-        final InputStream dataStream = recordsData.getInputStream()) {
+        final InputStream dataStream = recordsData.inputStream) {
       dataStream.transferTo(outputStream);
       succeeded = true;
     } catch (final Exception e) {
@@ -214,7 +214,7 @@ public class S3StorageOperations extends BlobStorageOperations {
       throw new RuntimeException("Upload failed");
     }
     final String newFilename = getFilename(fullObjectKey);
-    LOGGER.info("Uploaded buffer file to storage: {} -> {} (filename: {})", recordsData.getFilename(), fullObjectKey, newFilename);
+    LOGGER.info("Uploaded buffer file to storage: {} -> {} (filename: {})", recordsData.filename, fullObjectKey, newFilename);
     return newFilename;
   }
 
