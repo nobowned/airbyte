@@ -61,13 +61,10 @@ internal class FailureTrackingAirbyteMessageConsumerTest {
     }
 
     internal class TestConsumer : FailureTrackingAirbyteMessageConsumer() {
-        public override fun startTracked() {
-        }
+        public override fun startTracked() {}
 
-        public override fun acceptTracked(s: AirbyteMessage) {
-        }
+        public override fun acceptTracked(s: AirbyteMessage) {}
 
-        public override fun close(hasFailed: Boolean) {
-        }
+        public override fun close(hasFailed: Boolean) {}
     }
 }
