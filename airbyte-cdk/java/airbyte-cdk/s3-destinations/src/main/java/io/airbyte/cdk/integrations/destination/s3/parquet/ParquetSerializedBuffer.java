@@ -144,12 +144,12 @@ public class ParquetSerializedBuffer implements SerializableBuffer {
 
   @Override
   public long getMaxTotalBufferSizeInBytes() {
-    return FileBuffer.maxTotalBufferSizeInBytes;
+    return FileBuffer.getStaticMaxTotalBufferSizeInBytes();
   }
 
   @Override
   public long getMaxPerStreamBufferSizeInBytes() {
-    return FileBuffer.maxPerStreamBufferSizeInBytes;
+    return FileBuffer.getStaticMaxPerStreamBufferSizeInBytes();
   }
 
   @Override

@@ -112,7 +112,7 @@ public class CsvSerializedBufferTest {
                               final S3CsvFormatConfig config,
                               final String expectedData)
       throws Exception {
-    final File outputFile = buffer.file;
+    final File outputFile = buffer.getFile();
     try (final CsvSerializedBuffer writer = (CsvSerializedBuffer) CsvSerializedBuffer
         .createFunction(config, () -> buffer)
         .apply(streamPair, catalog)) {
