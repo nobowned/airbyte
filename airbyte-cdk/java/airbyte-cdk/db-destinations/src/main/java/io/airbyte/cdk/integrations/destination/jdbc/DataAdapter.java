@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+// TODO: Delete this class & test
 public class DataAdapter {
 
   private final Predicate<JsonNode> filterValueNode;
